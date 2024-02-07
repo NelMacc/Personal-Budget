@@ -1,0 +1,16 @@
+Build envelopes for budgeting
+Each envelope holds a certain amount of money for use on bills, groceries, entertainment
+Once you run out of money in the envelope youre out
+
+make three pages bills.js, groceries.js and entertainment.js
+give the user access to how much money they want to put into each envelope
+give the user access to add in the amount theyve spent on things within those envelopes
+the money theyve spent should be taken away from the amount they put in
+
+for instance if the entertainment envelope has $100(category_budget) in it the amount theyve spent(expense) will be subtracted from that
+$100(category_budget)
+$37(expense)
+$21(expense)
+
+$42 left(category_budget)
+(category_budget) will be replaced with the specific category, entertainment would be (entertainment_budget)
