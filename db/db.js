@@ -19,3 +19,5 @@ let envelopes = [
 envelopes[0].budget = envelopes[0].budget - 100
 
 console.log(envelopes[0].budget)
+
+module.exports = envelopes;
