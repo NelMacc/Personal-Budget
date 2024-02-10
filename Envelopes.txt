@@ -14,3 +14,35 @@ $21(expense)
 
 $42 left(category_budget)
 (category_budget) will be replaced with the specific category, entertainment would be (entertainment_budget)
+
+
+
+
+
+app.use(express.json());
+
+let budget = 0;
+let expenses = [];
+
+// Route to set budget
+app.put('/budget', (req, res) => {
+    const { amount } = req.body;
+    budget = amount;
+    res.json({ success: true, budget });
+});
+
+// Route to add an expense
+app.post('/expenses', (req, res) => {
+    const { amount, description } = req.body;
+    if (amount > budget) {
+        return res.status(400).json({ error: "Expense exceeds budget" });
+    }
+    expenses.push({ amount, description });
+    budget -= amount;
+    res.json({ success: true, budget, expenses });
+});
+
+// Route to get current budget and expenses
+app.get('/status', (req, res) => {
+    res.json({ budget, expenses });
+});
