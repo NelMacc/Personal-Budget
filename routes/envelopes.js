@@ -11,6 +11,19 @@ const newEnvelope = {
   budget: 300,
 };
 
+envelopes.push(newEnvelope)
+
+// retrieves all envelopes
+envelopesRouter.get("/envelopes", (req, res) => {
+  res.send(envelopes);
+}); 
+
+envelopesRouter.get("/envelopes/:id", (req, res) => {
+  const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
+  if (!envelope) res.status(404).send('The envelope with that ID was not found.');
+  res.send(envelope);
+});
+
 /* app.post('/envelopes', (req, res) => {
   res.send(envelopes)
 });
@@ -18,8 +31,3 @@ const newEnvelope = {
  app.get('/envelopes', (req, res) => {
   res.json(envelopes);
 }); */
-
-const port = 3000;
-app.listen(port, function () {
-  console.log(`App listening on port: ${port}!`);
-});
