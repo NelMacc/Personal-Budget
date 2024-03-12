@@ -46,3 +46,10 @@ app.post('/expenses', (req, res) => {
 app.get('/status', (req, res) => {
     res.json({ budget, expenses });
 });
+
+
+in envelopesRouter.post()
+when checking for whether category === a string of letters
+and when checking for whether budget === a number
+if you put nothing in it gets an error but if you put a number in category or a letter in budget it doesnt get an error
+this should be fixed so category only has letters and budget only has numbers

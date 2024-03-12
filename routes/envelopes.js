@@ -1,17 +1,20 @@
 const express = require("express");
 const app = express();
-const envelopesRouter = express.Router();
+
 let envelopes = require('../database/db')
- 
+
+const envelopesRouter = express.Router();
 module.exports = envelopesRouter
 
-const newEnvelope = {
+envelopesRouter.use(express.json());
+
+/* const newEnvelope = {
   id: 4,
   category: "Gas",
   budget: 300,
-};
+}; 
 
-envelopes.push(newEnvelope)
+envelopes.push(newEnvelope) */
 
 // retrieves all envelopes
 envelopesRouter.get("/envelopes", (req, res) => {
@@ -24,10 +27,20 @@ envelopesRouter.get("/envelopes/:id", (req, res) => {
   res.send(envelope);
 });
 
-/* app.post('/envelopes', (req, res) => {
-  res.send(envelopes)
-});
+envelopesRouter.post('/envelopes', (req, res) => {
+  if (!req.body.category || !typeof req.body.category === 'string') {
+    res.status(400).send('Category should be a string')
+  }
 
- app.get('/envelopes', (req, res) => {
-  res.json(envelopes);
-}); */
+  if (!req.body.budget || !typeof req.body.budget === 'number') {
+    res.status(400).send('Budget should be a number')
+  }
+  
+  const envelope = {
+    id: envelopes.length + 1,
+    category: req.body.category,
+    budget: req.body.budget
+  };
+  envelopes.push(envelope);
+  res.send(envelope);
+});
