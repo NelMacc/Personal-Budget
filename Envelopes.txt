@@ -53,3 +53,24 @@ when checking for whether category === a string of letters
 and when checking for whether budget === a number
 if you put nothing in it gets an error but if you put a number in category or a letter in budget it doesnt get an error
 this should be fixed so category only has letters and budget only has numbers
+
+envelopesRouter.put('/envelopes/:id', (req, res) => {
+  const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
+  if (!envelope) res.status(404).send('The envelope with that ID was not found.');
+
+  const { category, budget } = req.body;
+
+  if (!category && !budget) {
+    res.status(404).send('Updated category and budget were not found');
+    return;
+  } 
+
+  if (category) {
+    envelope.category = category;
+  }
+  if (budget) {
+    envelope.budget = budget;
+  }
+  
+  res.send(envelope);
+});
