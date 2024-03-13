@@ -15,7 +15,7 @@ envelopesRouter.get("/envelopes", (req, res) => {
 // retrieves one envelope by id
 envelopesRouter.get("/envelopes/:id", (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
-  if (!envelope) res.status(404).send('The envelope with that ID was not found.');
+  if (!envelope) return res.status(404).send('The envelope with that ID was not found.');
   res.send(envelope);
 });
 
@@ -27,7 +27,7 @@ const isNumber = n => /^-?[\d.]+(?:e-?\d+)?$/.test(n);
 // creates a new envelope
 envelopesRouter.post('/envelopes', (req, res) => {
   if (!req.body.category || !isAlpha(req.body.category)) {
-    res.status(400).send('Category should only use letters');
+    res.status(400).send('Category should only use letters and spaces');
     return;
   };
 
@@ -47,12 +47,12 @@ envelopesRouter.post('/envelopes', (req, res) => {
 
 envelopesRouter.put('/envelopes/:id', (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
-  if (!envelope) res.status(404).send('The envelope with that ID was not found.');
+  if (!envelope) return res.status(404).send('The envelope with that ID was not found.');
 
   const { newId, category, amountToSubtract } = req.body;
 
   if (!newId && !category && !amountToSubtract) {
-    res.status(404).send('Updated id, category and budget were not found');
+    res.status(404).send('You must include an updated id, category or budget');
     return;
   };
 
@@ -71,3 +71,12 @@ envelopesRouter.put('/envelopes/:id', (req, res) => {
   res.send(envelope);
 });
 
+envelopesRouter.delete('/envelopes/:id', (req, res) => {
+  const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
+  if (!envelope) return res.status(404).send('The envelope with that ID was not found.');
+
+  const index = envelopes.indexOf(envelope);
+  envelopes.splice(index, 1);
+
+  res.send(envelope)
+});
