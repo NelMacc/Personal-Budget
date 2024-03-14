@@ -45,6 +45,7 @@ envelopesRouter.post('/envelopes', (req, res) => {
   res.send(envelope);
 });
 
+// updates an envelope
 envelopesRouter.put('/envelopes/:id', (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
   if (!envelope) return res.status(404).send({ error: 'The envelope with that ID was not found.' });
@@ -71,6 +72,7 @@ envelopesRouter.put('/envelopes/:id', (req, res) => {
   res.send(envelope);
 });
 
+// deletes an envelope
 envelopesRouter.delete('/envelopes/:id', (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
   if (!envelope) return res.status(404).send({ error: 'The envelope with that ID was not found.' });
@@ -81,29 +83,24 @@ envelopesRouter.delete('/envelopes/:id', (req, res) => {
   res.send(envelope)
 });
 
+// switches the values of two objects same parameters
 envelopesRouter.post('/envelopes/switch_values', (req, res) => {
   const { firstEnvelopeId, secondEnvelopeId, parameterToSwitch } = req.body;
 
-  // Find the first envelope by ID
   const firstEnvelope = envelopes.find(env => env.id === firstEnvelopeId);
-
   if (!firstEnvelope) {
     return res.status(404).send({ error: 'The first envelope was not found.' });
   };
 
-  // Find the second envelope by ID
   const secondEnvelope = envelopes.find(env => env.id === secondEnvelopeId);
-
   if (!secondEnvelope) {
     return res.status(404).send({ error: 'The second envelope was not found.' });
   };
 
-  // Ensure both envelopes have the parameter to switch
   if (!firstEnvelope.hasOwnProperty(parameterToSwitch) || !secondEnvelope.hasOwnProperty(parameterToSwitch)) {
     return res.status(404).send({ error: 'The parameter to switch was not found in the envelopes.' });
   };
 
-  // Switch the values of the parameter between the two envelopes
   const tempValue = firstEnvelope[parameterToSwitch];
   firstEnvelope[parameterToSwitch] = secondEnvelope[parameterToSwitch];
   secondEnvelope[parameterToSwitch] = tempValue;
