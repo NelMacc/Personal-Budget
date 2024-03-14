@@ -15,7 +15,7 @@ envelopesRouter.get("/envelopes", (req, res) => {
 // retrieves one envelope by id
 envelopesRouter.get("/envelopes/:id", (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
-  if (!envelope) return res.status(404).send('The envelope with that ID was not found.');
+  if (!envelope) return res.status(404).send({ error: 'The envelope with that ID was not found.' });
   res.send(envelope);
 });
 
@@ -27,12 +27,12 @@ const isNumber = n => /^-?[\d.]+(?:e-?\d+)?$/.test(n);
 // creates a new envelope
 envelopesRouter.post('/envelopes', (req, res) => {
   if (!req.body.category || !isAlpha(req.body.category)) {
-    res.status(400).send('Category should only use letters and spaces');
+    res.status(400).send({ error: 'Category should only use letters and spaces' });
     return;
   };
 
   if (!req.body.budget || !isNumber(req.body.budget)) {
-    res.status(400).send('Budget should be a number');
+    res.status(400).send({ error: 'Budget should be a number' });
     return;
   };
   
@@ -47,12 +47,12 @@ envelopesRouter.post('/envelopes', (req, res) => {
 
 envelopesRouter.put('/envelopes/:id', (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
-  if (!envelope) return res.status(404).send('The envelope with that ID was not found.');
+  if (!envelope) return res.status(404).send({ error: 'The envelope with that ID was not found.' });
 
   const { newId, category, amountToSubtract } = req.body;
 
   if (!newId && !category && !amountToSubtract) {
-    res.status(404).send('You must include an updated id, category or budget');
+    res.status(404).send({ error: 'You must include an updated id, category or budget' });
     return;
   };
 
@@ -73,7 +73,7 @@ envelopesRouter.put('/envelopes/:id', (req, res) => {
 
 envelopesRouter.delete('/envelopes/:id', (req, res) => {
   const envelope = envelopes.find(e => e.id === parseInt(req.params.id));
-  if (!envelope) return res.status(404).send('The envelope with that ID was not found.');
+  if (!envelope) return res.status(404).send({ error: 'The envelope with that ID was not found.' });
 
   const index = envelopes.indexOf(envelope);
   envelopes.splice(index, 1);
@@ -88,19 +88,19 @@ envelopesRouter.post('/envelopes/switch_values', (req, res) => {
   const firstEnvelope = envelopes.find(env => env.id === firstEnvelopeId);
 
   if (!firstEnvelope) {
-    return res.status(404).send({ error: 'First envelope not found' });
+    return res.status(404).send({ error: 'The first envelope was not found.' });
   };
 
   // Find the second envelope by ID
   const secondEnvelope = envelopes.find(env => env.id === secondEnvelopeId);
 
   if (!secondEnvelope) {
-    return res.status(404).send({ error: 'Second envelope not found' });
+    return res.status(404).send({ error: 'The second envelope was not found.' });
   };
 
   // Ensure both envelopes have the parameter to switch
   if (!firstEnvelope.hasOwnProperty(parameterToSwitch) || !secondEnvelope.hasOwnProperty(parameterToSwitch)) {
-    return res.status(404).send({ error: 'Parameter to switch not found in one or both envelopes' });
+    return res.status(404).send({ error: 'The parameter to switch was not found in the envelopes.' });
   };
 
   // Switch the values of the parameter between the two envelopes
