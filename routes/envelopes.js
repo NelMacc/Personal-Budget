@@ -83,7 +83,7 @@ envelopesRouter.delete('/envelopes/:id', (req, res) => {
   res.send(envelope)
 });
 
-// switches the values of two objects same parameters
+// switches the values of two object's same parameters
 envelopesRouter.post('/envelopes/switch_values', (req, res) => {
   const { firstEnvelopeId, secondEnvelopeId, parameterToSwitch } = req.body;
 
